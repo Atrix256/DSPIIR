@@ -65,7 +65,7 @@ void ReportFilter(const char* fileName, float a0, float alpha1, float alpha2, fl
     const float a1 = alpha1 * a0;
     const float a2 = alpha2 * a0;
 
-    // calculate the 2 zeroes
+    // calculate the 2 zeros
     complex zero1, zero2;
     {
         complex left, right;
@@ -114,7 +114,7 @@ void ReportFilter(const char* fileName, float a0, float alpha1, float alpha2, fl
         if (index == 1)
             fprintf(file, ",\"\",\"output[index] = input[index] * %f + input[index-1] * %f + input[index-1] * %f - output[index-1] * %f - output[index-2] * %f\"\n", a0, a1, a2, b1, b2);
         else if (index == 3)
-            fprintf(file, ",\"\",\"Zeroes = %f + %fi, %f + %fi\"\n", zero1.real(), zero1.imag(), zero2.real(), zero2.imag());
+            fprintf(file, ",\"\",\"Zeros = %f + %fi, %f + %fi\"\n", zero1.real(), zero1.imag(), zero2.real(), zero2.imag());
         else if (index == 5)
             fprintf(file, ",\"\",\"Poles = %f + %fi, %f + %fi\"\n", pole1.real(), pole1.imag(), pole2.real(), pole2.imag());
         else
@@ -126,7 +126,7 @@ void ReportFilter(const char* fileName, float a0, float alpha1, float alpha2, fl
 
 void ReportOscillator(const char* fileName, float radiansPerSample)
 {
-    // calculate zeroes and filter coefficients
+    // calculate zeros and filter coefficients
     complex zero1 = std::polar<float>(1.0f, radiansPerSample);
 
     complex zero2;
@@ -196,7 +196,7 @@ int main(int argc, char**argv)
     {
         ReportFilter("fil_low_boost.csv", 1.0f, 0.0f, 0.0f, -1.0f, 0.35f);
         ReportFilter("fil_high_boost.csv", 1.0f, 0.0f, 0.0f, 1.0f, 0.35f);
-        ReportFilter("fil_poles_and_zeroes.csv", 1.0f, -1.0f, 1.0f, -1.9f, 0.97f);
+        ReportFilter("fil_poles_and_zeros.csv", 1.0f, -1.0f, 1.0f, -1.9f, 0.97f);
     }
 
     return 0;
