@@ -93,8 +93,8 @@ void ReportFilter(const char* fileName, float a0, float alpha1, float alpha2, fl
         else
             right.real(sqrt(discriminant) / 2.0f);
 
-        zero1 = left - right;
-        zero2 = left + right;
+        pole1 = left - right;
+        pole2 = left + right;
     }
 
     fprintf(file, "\"Frequency\",\"Amplitude\",\"Phase\",");
@@ -107,7 +107,7 @@ void ReportFilter(const char* fileName, float a0, float alpha1, float alpha2, fl
         float percent = float(index) / float(c_numFrequencies - 1);
         float angle = percent * c_pi;
 
-        complex response = a0 * (1.0f + alpha1 * Z(-1, angle) + alpha2 * Z(-2, angle));
+        complex response = a0 * (1.0f + alpha1 * Z(-1, angle) + alpha2 * Z(-2, angle)) / (1.0f + b1 * Z(-1, angle) + b2 * Z(-2, angle));
 
         fprintf(file, "\"%f\",\"%f\",\"%f\"", percent, std::abs(response), atan2(response.imag(), response.real()));
 
@@ -192,37 +192,12 @@ int main(int argc, char**argv)
         ReportOscillator("osc_10.csv", DegreesToRadians(10.0f));
     }
 
-    // TODO: these below are old
-
-    /*
-    // order 2 filters
+    // Filters
     {
-        // a low pass filter
-        ReportFilter("2_lpf.csv", 0.5f, 2.0f, 1.22f);
-
-        // a high pass filter
-        ReportFilter("2_hpf.csv", 0.5f, -1.6f, 0.8f);
-
-        // a notch filter at 1/2 nyquist
-        ReportFilter("2_notch.csv", 0.5f, 0.0f, 1.0f);
+        ReportFilter("fil_low_boost.csv", 1.0f, 0.0f, 0.0f, -1.0f, 0.35f);
+        ReportFilter("fil_high_boost.csv", 1.0f, 0.0f, 0.0f, 1.0f, 0.35f);
+        ReportFilter("fil_poles_and_zeroes.csv", 1.0f, -1.0f, 1.0f, -1.9f, 0.97f);
     }
-    */
 
     return 0;
 }
-
-/*
-
-TODO:
-
-* adapt to IIR (biquad)
-* find some good params that are worth generating csv's for
-
-* are the poles and zeroes correct? Verify against demo.
-
-
-BLOG NOTES:
-* initial state lets you set phase of the wave
-* make a super simple "here's how to make a cosine wave" oscillator thing. mention numerical drift.
-
-*/
