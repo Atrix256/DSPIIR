@@ -163,16 +163,31 @@ void ReportOscillator(const char* fileName, float radiansPerSample)
     for (size_t index = 0; index < c_oscillatorSamples; ++index)
         outputActual[index] = cosf(float(index) * radiansPerSample);
 
+    // get the exp oscillator values
+    std::vector<float> outputExp(c_oscillatorSamples);
+    {
+        float period = 2.0f * c_pi / radiansPerSample;
+
+        complex y(1.0f, 0.0f);
+        complex a = std::polar(1.0f, 2.0f * c_pi / period);
+
+        for (size_t index = 0; index < c_oscillatorSamples; ++index)
+        {
+            outputExp[index] = y.real();
+            y = y * a;
+        }
+    }
+
     // write data to the csv
     FILE* file = nullptr;
     fopen_s(&file, fileName, "wt");
 
-    fprintf(file, "\"Sample Index\",\"Output\",\"Actual\"\n");
+    fprintf(file, "\"Sample Index\",\"Output\",\"Exp Oscillator\",\"Actual\"\n");
 
     int index = 0;
     for (float f : output)
     {
-        fprintf(file, "\"%i\",\"%f\",\"%f\",\n", index, f, outputActual[index]);
+        fprintf(file, "\"%i\",\"%f\",\"%f\",\"%f\",\n", index, f, outputExp[index], outputActual[index]);
         index++;
     }
 
