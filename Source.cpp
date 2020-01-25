@@ -166,10 +166,8 @@ void ReportOscillator(const char* fileName, float radiansPerSample)
     // get the exp oscillator values
     std::vector<float> outputExp(c_oscillatorSamples);
     {
-        float period = 2.0f * c_pi / radiansPerSample;
-
         complex y(1.0f, 0.0f);
-        complex a = std::polar(1.0f, 2.0f * c_pi / period);
+        complex a = std::polar(1.0f, radiansPerSample);
 
         for (size_t index = 0; index < c_oscillatorSamples; ++index)
         {
